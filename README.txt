@@ -55,10 +55,16 @@ Search for “Genealogical Tree” under “Plugins” → “Add New” in your
 
 == Changelog ==
 
+ = 1.0.1 - 04 August 2018 =
+ * Optimize css and js
+
  = 1.0.0 - 03 August 2018 =
  * First Release
 
 == Upgrade Notice ==
+
+= 1.0.1 - 04 August 2018 =
+Optimize css and js
 
 = 1.0.0 - 03 August 2018 =
 First Release

@@ -16,7 +16,7 @@
  * Plugin Name:       Genealogical Tree
  * Plugin URI:        https://wordpress.org/plugins/genealogical-tree
  * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Author:            ak devs
  * Author URI:        https://github.com/akdevsfr
  * License:           GPL-2.0+
@@ -85,7 +85,7 @@ if ( function_exists( 'gt_fs' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'GENEALOGICAL_TREE_VERSION', '1.0.0' );
+define( 'GENEALOGICAL_TREE_VERSION', '1.0.1' );
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-genealogical-tree-activator.php

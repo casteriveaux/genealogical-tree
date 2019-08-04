@@ -35,9 +35,3 @@ This may have bugs and lack of many features. If you want to contribute on this 
 ## Installation 
 
 Search for “Genealogical Tree” under “Plugins” → “Add New” in your WordPress dashboard to install the plugin.
-
-Use this shortcode to display tree. [gt-tree family='{family_group_ID}']
-
-family_group_ID means ID of family family_group (Famils Group)
-
-to get any help you direct email to me - akdevs.fr@gmail.com
