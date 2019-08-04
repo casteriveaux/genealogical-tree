@@ -1,0 +1,81 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+.gta-container * {
+	box-sizing: border-box;
+}
+ .gta-container {
+ 	width: 100%;
+ }
+
+ .gta-row {
+	margin-left: -12px;
+	margin-right: -12px;
+ }
+  .gta-row:after,
+  .gta-row:before {
+  	display: table;
+  	content: "";
+  }
+
+  .gta-row:after {
+  	clear: both;
+  }
+
+  .gta-col-3 {
+  	float: left;
+  	width: 33.3333333%;
+  	padding-left: 12px;
+  	padding-right: 12px;
+  }
+
+
+.gta-table {
+	width: 100%;
+}
+.gta-table td {
+	vertical-align: top;
+}
+.gta-table  td:first-child {
+width: 150px;
+}
+
+.gta-table td td:first-child {
+width: 100px;
+}
+
+.gta-table .gta-table td:first-child {
+width: initial;
+}
+.gta-table select,
+.gta-table input[type=text]{
+	width: 100%;
+  }
+
+.gta-table h4 {
+	font-size: 18px;
+	    margin: 0px;
+    padding: 10px 0px;
+}
+.gta-table label {
+    padding: 5px 0;
+    display: block;
+}
+
+.gta-table .repetead-field {
+	padding-right: 32px;
+	position: relative;
+}
+.gta-table .repetead-field .clone{
+    position: absolute;
+    right: 0px;
+    top: 1px;
+    font-size: 0px;
+    width: 27px;
+    height: 27px;
+    background: url('../img/add.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
