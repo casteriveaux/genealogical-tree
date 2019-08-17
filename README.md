@@ -6,13 +6,18 @@ Genealogical Tree is a plugin for display family tree. This is a perfect plugin 
 
 Use this shortcode to display tree. 
 
-    [gt-tree family='x']
+    [gt-tree family='{family-ID}']
 
-Use this shortcode to display tree. 
+You can also add parameter called 'root' 
 
-     [gt-members family='x']
+    [gt-tree family='{family-ID}' root='{member-ID}']
 
-x means ID of family family_group (Famils Group)
+Use this shortcode to display members. 
+
+     [gt-members family='{family-ID}']
+
+* family-ID means ID of family family_group (Family Group). It is must required parameter.
+* member-ID means ID of root member. It is optional parameter.
 
 to get any help you direct email to me - akdevs.fr@gmail.com
 

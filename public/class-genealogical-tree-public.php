@@ -100,14 +100,7 @@ class Genealogical_Tree_Public {
 		 */
 
 		wp_enqueue_script( 'underscore');
-		//wp_enqueue_script( $this->plugin_name.'-tooltip', plugin_dir_url( __FILE__ ) . 'js/tooltip.min.js', array( 'jquery' ), $this->version, true );
-		//wp_enqueue_script( $this->plugin_name.'-popper', plugin_dir_url( __FILE__ ) . 'js/popper.min.js', array( 'jquery' ), $this->version, true );
-		//wp_enqueue_script( $this->plugin_name.'-json', plugin_dir_url( __FILE__ ) . 'js/json.js', array( 'jquery' ), $this->version, true );
-		//wp_enqueue_script( $this->plugin_name.'-familytree', plugin_dir_url( __FILE__ ) . 'js/familytree.js', array( 'jquery' ), $this->version, true );
-		//wp_enqueue_script( $this->plugin_name.'-panzoom',  plugin_dir_url( __FILE__ ) . 'js/panzoom.min.js', array( 'jquery' ), $this->version, true );
-		//wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/genealogical-tree-public.js', array( 'jquery' ), $this->version, true );
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/genealogical-tree-public.min.js', array( 'jquery' ), $this->version, true );
-		
 
 	}
 
@@ -521,10 +514,13 @@ class Genealogical_Tree_Public {
 			'style' => 1,
 		), $atts );
 
+		if(!$data['family']) {
+			return 'No data';
+		}
+
 		if(isset($_GET['tree'])){
 			$data['root'] = $_GET['tree'];
 		}
-
 
 		if($data['family']){
 			$tree = $this->get_root_by_family_group($data['family']);
@@ -533,6 +529,10 @@ class Genealogical_Tree_Public {
 
 		if($data['root']){
 			$tree = $data['root'];
+		}
+
+		if(!$tree) {
+			return 'No data';
 		}
 
 		if($data['style']=='json'){

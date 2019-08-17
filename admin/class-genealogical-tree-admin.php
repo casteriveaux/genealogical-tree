@@ -134,9 +134,14 @@ class Genealogical_Tree_Admin
             'manage_categories',
             'edit-tags.php?taxonomy=family_group&post_type=member'
         );
-        /*
-        add_submenu_page( 'genealogical-tree', __( 'Settings', 'genealogical-tree' ), __( 'Settings', 'genealogical-tree' ), 'manage_options', 'genealogical-tree', array( $this, 'genealogical_tree_page' ) );
-        */
+        add_submenu_page(
+            'genealogical-tree',
+            __( 'Settings', 'genealogical-tree' ),
+            __( 'Settings', 'genealogical-tree' ),
+            'manage_options',
+            'genealogical-tree',
+            array( $this, 'genealogical_tree_page' )
+        );
     }
     
     /**
@@ -560,11 +565,22 @@ class Genealogical_Tree_Admin
         update_post_meta( $post_id, 'phone', $phone );
         update_post_meta( $post_id, 'email', $email );
         update_post_meta( $post_id, 'address', $address );
-        if ( $sex === 'M' ) {
-            $spouses = sanitize_text_field( $_POST['gt']['wife'] );
+        if($sex==='M'){
+            if($_POST['gt']['wife']){
+                foreach ($_POST['gt']['wife'] as $key => $value) {
+                    $_POST['gt']['wife'][$key]['id'] = sanitize_text_field($value['id']);
+                }
+            }
+            $spouses = $_POST['gt']['wife'];
         }
-        if ( $sex === 'F' ) {
-            $spouses = sanitize_text_field( $_POST['gt']['husb'] );
+
+        if($sex==='F'){
+            if($_POST['gt']['husb']){
+                foreach ($_POST['gt']['husb'] as $key => $value) {
+                    $_POST['gt']['husb'][$key]['id'] = sanitize_text_field($value['id']);
+                }
+            }
+            $spouses = $_POST['gt']['husb'];
         }
         if ( $spouses ) {
             if ( !current( $spouses )['id'] ) {
