@@ -1,4 +1,5 @@
 <?php
+namespace Genealogical_Tree\Includes;
 
 /**
  * Fired during plugin deactivation

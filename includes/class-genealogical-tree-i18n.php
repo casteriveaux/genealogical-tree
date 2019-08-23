@@ -1,4 +1,5 @@
 <?php
+namespace Genealogical_Tree\Includes;
 
 /**
  * Define the internationalization functionality
@@ -25,7 +26,6 @@
  * @author     ak devs <akdevs.fr@gmail.com>
  */
 class Genealogical_Tree_i18n {
-
 
 	/**
 	 * Load the plugin text domain for translation.

@@ -15,8 +15,8 @@
  * @wordpress-plugin
  * Plugin Name:       Genealogical Tree
  * Plugin URI:        https://wordpress.org/plugins/genealogical-tree
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
- * Version:           1.0.1
+ * Description:       Genealogical Tree is a ultimate solution for creating and displaying family trees, family history on WordPress.
+ * Version:           1.2.0
  * Author:            ak devs
  * Author URI:        https://github.com/akdevsfr
  * License:           GPL-2.0+
@@ -81,19 +81,25 @@ if ( function_exists( 'gt_fs' ) ) {
 }
 
 /**
+ * The code that runs during agendapress activation.
+ * This action is documented in vendor/autoload.php
+ */
+include dirname( __FILE__ ) . '/vendor/autoload.php';
+/**
  * Currently plugin version.
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'GENEALOGICAL_TREE_VERSION', '1.0.1' );
+define( 'GENEALOGICAL_TREE_VERSION', '1.2.0' );
+define( 'GENEALOGICAL_TREE_DIR_URL', plugin_dir_url( __FILE__ ) );
+define( 'GENEALOGICAL_TREE_DIR_PATH', plugin_dir_path( __FILE__ ) );
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-genealogical-tree-activator.php
  */
 function activate_genealogical_tree()
 {
-    require_once plugin_dir_path( __FILE__ ) . 'includes/class-genealogical-tree-activator.php';
-    Genealogical_Tree_Activator::activate();
+    \Genealogical_Tree\Includes\Genealogical_Tree_Activator::activate();
 }
 
 /**
@@ -102,17 +108,11 @@ function activate_genealogical_tree()
  */
 function deactivate_genealogical_tree()
 {
-    require_once plugin_dir_path( __FILE__ ) . 'includes/class-genealogical-tree-deactivator.php';
-    Genealogical_Tree_Deactivator::deactivate();
+    \Genealogical_Tree\Includes\Genealogical_Tree_Deactivator::deactivate();
 }
 
 register_activation_hook( __FILE__, 'activate_genealogical_tree' );
 register_deactivation_hook( __FILE__, 'deactivate_genealogical_tree' );
-/**
- * The core plugin class that is used to define internationalization,
- * admin-specific hooks, and public-facing site hooks.
- */
-require plugin_dir_path( __FILE__ ) . 'includes/class-genealogical-tree.php';
 /**
  * Begins execution of the plugin.
  *
@@ -124,7 +124,7 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-genealogical-tree.php';
  */
 function run_genealogical_tree()
 {
-    $plugin = new Genealogical_Tree();
+    $plugin = new \Genealogical_Tree\Includes\Genealogical_Tree();
     $plugin->run();
 }
 

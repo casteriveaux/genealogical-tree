@@ -29,6 +29,24 @@
   	padding-left: 12px;
   	padding-right: 12px;
   }
+  .shortcode.column-shortcode {
+    width: 100%;
+
+  }
+.shortcode.column-shortcode code {
+    white-space: nowrap;
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+}
+.shortcode.column-shortcode td {
+  padding: 0px;
+}
+
+.taxonomy-gt-family-group .fixed .column-slug{
+  width: 15%;
+}
+
 
 
 .gta-table {
@@ -78,4 +96,36 @@ width: initial;
     background-position: center;
     background-repeat: no-repeat;
     cursor: pointer;
+}
+
+.gta-table .repetead-field .delete{
+    position: absolute;
+    right: 0px;
+    top: 1px;
+    font-size: 0px;
+    width: 27px;
+    height: 27px;
+    background: url('../img/delete.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+
+
+
+ .gt-subnav li {
+  display: inline-block;
+ }
+  .gt-subnav li a{
+    text-decoration: none;
+ }
+   .gt-subnav .gt-subnav-active{
+        color: #000;
+    font-weight: 600;
+ }
+
+
+th p.description {
+font-weight: normal;
+display: none;
 }

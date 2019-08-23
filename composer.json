@@ -1,0 +1,29 @@
+{
+    "name": "akdevsfr/genealogical-treep",
+    "description": "Ultimate wordpress plugin for genealogy",
+    "keywords": ["wordpress", "plugin", "genealogy", "family", "family tree"],
+    "homepage": "https://akdevsfr.com",
+    "type": "wordpress-plugin",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "akdevs fr",
+            "email": "akdevs.fr@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload" : {
+        "psr-4" : {
+            "Genealogical_Tree\\Includes\\": "includes/",
+            "Genealogical_Tree\\Genealogical_Tree_Public\\": "public/",
+            "Genealogical_Tree\\Genealogical_Tree_Admin\\": "admin/"
+        },
+        "classmap": [
+            "includes",
+            "public",
+            "admin"
+        ]
+    }
+}

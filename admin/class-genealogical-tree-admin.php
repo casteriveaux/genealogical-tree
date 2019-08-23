@@ -1,5 +1,7 @@
 <?php
 
+namespace Genealogical_Tree\Genealogical_Tree_Admin;
+
 /**
  * The admin-specific functionality of the plugin.
  *
@@ -125,19 +127,19 @@ class Genealogical_Tree_Admin
             __( 'Add New', 'genealogical-tree' ),
             __( 'Add New', 'genealogical-tree' ),
             'manage_options',
-            'post-new.php?post_type=member'
+            'post-new.php?post_type=gt-member'
         );
         add_submenu_page(
             'genealogical-tree',
             __( 'Family Groups', 'genealogical-tree' ),
             __( 'Family Groups', 'genealogical-tree' ),
             'manage_categories',
-            'edit-tags.php?taxonomy=family_group&post_type=member'
+            'edit-tags.php?taxonomy=gt-family-group&post_type=gt-member'
         );
         add_submenu_page(
             'genealogical-tree',
-            __( 'Settings', 'genealogical-tree' ),
-            __( 'Settings', 'genealogical-tree' ),
+            __( 'How It Work!', 'genealogical-tree' ),
+            __( 'How It Work', 'genealogical-tree' ),
             'manage_options',
             'genealogical-tree',
             array( $this, 'genealogical_tree_page' )
@@ -145,23 +147,65 @@ class Genealogical_Tree_Admin
     }
     
     /**
-     * Register theavaScript for the admin area.
+     * View for How It Work page.
      *
      * @since    1.0.0
      */
     public function genealogical_tree_page()
     {
+        //$active_tab = isset( $_GET[ 'tab' ] ) ? sanitize_text_field($_GET[ 'tab' ]) : '';
+        //$active_section = isset( $_GET[ 'section' ] ) ? sanitize_text_field($_GET[ 'section' ]) : '';
+        //require_once plugin_dir_path( __FILE__ ) . 'partials/genealogical-tree-admin-settings.php';
         ?>
-        <div class="wrap">
-            <h2>Settings</h2>
-
-
-        </div>
-        <?php 
+		<div class="wrap">
+			<h2>How It Work</h2>
+			<div class="error">
+				<p>If you had older version, <strong>Members</strong> and <strong>Family Groups</strong> may hide. Dont worry about that. We have already a script to fix that. Contact us <a href="<?php 
+        echo  site_url() ;
+        ?>/wp-admin/admin.php?page=genealogical-tree-contact">here</a> </p>
+			</div>
+			<h3>1. Create a family group</h3>
+			<p style="max-width: 800px;">On create a new family group, system will create 3 new pages for Tree list page, Tree page and Members page with shortcode. You can create a family group from here (<a href="<?php 
+        echo  plugin_dir_url( __FILE__ ) ;
+        ?>img/fg1.jpg">fig:1</a>).</p>
+			<h3>2. Create members</h3>
+			<p style="max-width: 800px;">Once you create a family group, you can add member now (<a href="<?php 
+        echo  plugin_dir_url( __FILE__ ) ;
+        ?>img/fg2.jpg">fig:2</a>), you need to select a family group. (<a href="<?php 
+        echo  plugin_dir_url( __FILE__ ) ;
+        ?>img/fg3.jpg">fig: 3</a>) (You will able to create member without family group). Add more related member whih same family group and make sure gender and relationship selection is correct (like father, mother, spouse)</p>
+			<h3>3. Start playing !</h3>
+			<p style="max-width: 800px;">All done now. You can check pages now. You will find pages in Pages area. Or you can find it specifically here (<a href="<?php 
+        echo  plugin_dir_url( __FILE__ ) ;
+        ?>img/fg4.jpg">fig:4</a>) on family group page. </p>
+			<h3># Need Help?</h3>
+			<p style="max-width: 800px;"> To get any help contact us <a href="<?php 
+        echo  site_url() ;
+        ?>/wp-admin/admin.php?page=genealogical-tree-contact">here</a> or can post query here <a href="https://wordpress.org/support/plugin/genealogical-tree/">Support »  Genealogical Tree</a>. It will be pleasure for me to assist you. </p>
+			<?php 
+        
+        if ( gt_fs()->is_not_paying() ) {
+            ?>
+			<h3># Want premium features?</h3>
+			<a class="button button-primary" href="<?php 
+            echo  gt_fs()->get_upgrade_url() ;
+            ?>">Get Pro Version</a>
+			<?php 
+        }
+        
+        ?>
+		</div>
+		<?php 
+        /*
+        global $wpdb;
+        $results = $wpdb->get_results("UPDATE  `wp_term_taxonomy` SET  `taxonomy` =  'gt-family-group' WHERE  `taxonomy` = 'family_group'");
+        $results = $wpdb->get_results("UPDATE  `wp_posts` SET  `post_type` =  'gt-member' WHERE  `post_type` = 'member'");
+        $results = $wpdb->get_results("UPDATE  `wp_posts` SET  `post_type` =  'gt-family' WHERE  `post_type` = 'family'");
+        */
     }
     
     /**
-     * Register theavaScript for the admin area.
+     * Register post type and taxonomy.
      *
      * @since    1.0.0
      */
@@ -194,7 +238,7 @@ class Genealogical_Tree_Admin
             'show_in_menu'       => 'genealogical-tree',
             'query_var'          => true,
             'rewrite'            => array(
-            'slug' => 'member',
+            'slug' => 'gt-member',
         ),
             'capability_type'    => 'post',
             'has_archive'        => true,
@@ -202,7 +246,7 @@ class Genealogical_Tree_Admin
             'menu_position'      => null,
             'supports'           => $supports,
         );
-        register_post_type( 'member', $args );
+        register_post_type( 'gt-member', $args );
         $labels = array(
             'name'               => _x( 'Families', 'post type general name', 'genealogical-tree' ),
             'singular_name'      => _x( 'Family', 'post type singular name', 'genealogical-tree' ),
@@ -230,7 +274,7 @@ class Genealogical_Tree_Admin
             'show_in_menu'       => false,
             'query_var'          => true,
             'rewrite'            => array(
-            'slug' => 'family',
+            'slug' => 'gt-family',
         ),
             'capability_type'    => 'post',
             'has_archive'        => true,
@@ -238,7 +282,7 @@ class Genealogical_Tree_Admin
             'menu_position'      => null,
             'supports'           => $supports,
         );
-        register_post_type( 'family', $args );
+        register_post_type( 'gt-family', $args );
         $labels = array(
             'name'                       => _x( 'Family Groups', 'genealogical-tree', 'genealogical-tree' ),
             'singular_name'              => _x( 'Family Group', 'taxonomy singular name', 'genealogical-tree' ),
@@ -265,12 +309,17 @@ class Genealogical_Tree_Admin
             'update_count_callback' => '_update_post_term_count',
             'query_var'             => true,
             'rewrite'               => array(
-            'slug' => 'family_group',
+            'slug' => 'gt-family-group',
         ),
         );
-        register_taxonomy( 'family_group', array( 'member', 'family' ), $args );
+        register_taxonomy( 'gt-family-group', array( 'gt-member', 'gt-family' ), $args );
     }
     
+    /**
+     * Member columns.
+     *
+     * @since    1.0.0
+     */
     public function member_columns( $columns )
     {
         $columns['ID'] = __( 'ID', 'genealogical-tree' );
@@ -279,6 +328,11 @@ class Genealogical_Tree_Admin
         return $columns;
     }
     
+    /**
+     * Member sortable columns.
+     *
+     * @since    1.0.0
+     */
     public function member_sortable_columns( $columns )
     {
         $columns['born'] = 'born';
@@ -286,6 +340,11 @@ class Genealogical_Tree_Admin
         return $columns;
     }
     
+    /**
+     * Member posts born column.
+     *
+     * @since    1.0.0
+     */
     public function member_posts_born_column( $column, $post_id )
     {
         switch ( $column ) {
@@ -305,19 +364,24 @@ class Genealogical_Tree_Admin
         }
     }
     
+    /**
+     * Member born orderby
+     *
+     * @since    1.0.0
+     */
     public function member_born_orderby( $query )
     {
         $orderby = $query->get( 'orderby' );
         /*
         if( 'born' == $orderby ) {
-            $query->set('meta_key','born');
-            $query->set('orderby','meta_value');
+        	$query->set('meta_key','born');
+        	$query->set('orderby','meta_value');
         }
         */
         
-        if ( 'family_group' == $orderby ) {
+        if ( 'gt-family-group' == $orderby ) {
             $query->set( 'tax_query', array(
-                'taxonomy' => 'family_group',
+                'taxonomy' => 'gt-family-group',
             ) );
             $query->set( 'orderby', 'meta_value' );
         }
@@ -335,7 +399,7 @@ class Genealogical_Tree_Admin
             'genealogical-tree-member-meta-box',
             __( 'Member info', 'genealogical-tree' ),
             array( $this, 'render_meta_box_member_info' ),
-            'member',
+            'gt-member',
             'normal',
             'high'
         );
@@ -352,7 +416,7 @@ class Genealogical_Tree_Admin
             'genealogical-tree-family-meta-box',
             __( 'Family info', 'genealogical-tree' ),
             array( $this, 'render_meta_box_family_info' ),
-            'family',
+            'gt-family',
             'normal',
             'high'
         );
@@ -369,7 +433,7 @@ class Genealogical_Tree_Admin
         //$get_post_meta = get_post_meta($post->ID);
         //$get_post_meta['chill'] = get_post_meta($post->ID, 'chill');
         //print_r($get_post_meta);
-        //echo "<pre>";;
+        // echo "<pre>";;
     }
     
     /**
@@ -391,8 +455,8 @@ class Genealogical_Tree_Admin
         $phone = ( get_post_meta( $post->ID, 'phone', true ) ? get_post_meta( $post->ID, 'phone', true ) : $this->fake_ci() );
         $email = ( get_post_meta( $post->ID, 'email', true ) ? get_post_meta( $post->ID, 'email', true ) : $this->fake_ci() );
         $address = ( get_post_meta( $post->ID, 'address', true ) ? get_post_meta( $post->ID, 'address', true ) : $this->fake_ci() );
-        $query = new WP_Query( array(
-            'post_type'      => 'member',
+        $query = new \WP_Query( array(
+            'post_type'      => 'gt-member',
             'posts_per_page' => -1,
         ) );
         $fathers = array();
@@ -413,28 +477,30 @@ class Genealogical_Tree_Admin
         }
         
         if ( !isset( $event['birt'] ) ) {
-            $event['birt'][0] = $this->fake_birt_deat();
+            $event['birt'][0] = $this->fake_event();
             if ( !current( $event['birt'] ) ) {
-                $event['birt'][0] = $this->fake_birt_deat();
+                $event['birt'][0] = $this->fake_event();
             }
         }
         
         
         if ( !isset( $event['deat'] ) ) {
-            $event['deat'][0] = $this->fake_birt_deat();
+            $event['deat'][0] = $this->fake_event();
             if ( !current( $event['deat'] ) ) {
-                $event['deat'][0] = $this->fake_birt_deat();
+                $event['deat'][0] = $this->fake_event();
             }
         }
         
         require_once plugin_dir_path( __FILE__ ) . 'partials/genealogical-tree-meta-member-info.php';
-        //print_r('<pre>');
-        //$get_post_meta = get_post_meta($post->ID);
-        //$get_post_meta['spouses'] = get_post_meta($post->ID, 'spouses', true);
-        //$get_post_meta['childof'] = get_post_meta($post->ID, 'childof', true);
-        //$get_post_meta['event'] = get_post_meta($post->ID, 'event', true);
-        //print_r($get_post_meta);
-        //print_r('</pre>');
+        /*
+        print_r('<pre>');
+        $get_post_meta = get_post_meta($post->ID);
+        $get_post_meta['spouses'] = get_post_meta($post->ID, 'spouses', true);
+        $get_post_meta['childof'] = get_post_meta($post->ID, 'childof', true);
+        $get_post_meta['event'] = get_post_meta($post->ID, 'event', true);
+        print_r($get_post_meta);
+        print_r('</pre>');
+        */
     }
     
     /**
@@ -442,16 +508,17 @@ class Genealogical_Tree_Admin
      *
      * @since    1.0.0
      */
-    public function fake_birt_deat()
+    public function fake_event()
     {
         return array(
             'date'  => '',
             'place' => '',
+            'type'  => '',
         );
     }
     
     /**
-     * Register theavaScript for the admin area.
+     * fake ci.
      *
      * @since    1.0.0
      */
@@ -461,7 +528,7 @@ class Genealogical_Tree_Admin
     }
     
     /**
-     * Register theavaScript for the admin area.
+     * repear full name.
      *
      * @since    1.0.0
      */
@@ -470,6 +537,11 @@ class Genealogical_Tree_Admin
         return wp_strip_all_tags( trim( str_replace( array( '/', '\\' ), array( ' ', '' ), $name ) ) );
     }
     
+    /**
+     * family group validation notice handler.
+     *
+     * @since    1.0.0
+     */
     public function family_group_validation_notice_handler()
     {
         $errors = get_option( 'family_group_validation' );
@@ -480,7 +552,7 @@ class Genealogical_Tree_Admin
     }
     
     /**
-     * Register theavaScript for the admin area.
+     * update meta boxes member info.
      *
      * @since    1.0.0
      */
@@ -497,7 +569,7 @@ class Genealogical_Tree_Admin
             return $post_id;
         }
         
-        if ( 'member' == $_POST['post_type'] ) {
+        if ( 'gt-member' == $_POST['post_type'] ) {
             if ( !current_user_can( 'edit_page', $post_id ) ) {
                 return $post_id;
             }
@@ -507,7 +579,7 @@ class Genealogical_Tree_Admin
             }
         }
         
-        $family_group = get_the_terms( $post, 'family_group' );
+        $family_group = get_the_terms( $post_id, 'gt-family-group' );
         
         if ( !$family_group ) {
             $errors = 'Whoops... you forgot to select family group.';
@@ -534,23 +606,33 @@ class Genealogical_Tree_Admin
             
             if ( is_int( $key1 ) ) {
                 foreach ( $value1 as $key2 => $value2 ) {
-                    $event[$value2['type']][$xcv] = array(
-                        'type'  => sanitize_text_field( $value2['type'] ),
-                        'ref'   => sanitize_text_field( $value2['ref'] ),
-                        'date'  => sanitize_text_field( $value2['date'] ),
-                        'place' => sanitize_text_field( $value2['place'] ),
-                    );
+                    
+                    if ( $value2['type'] ) {
+                        $event[$value2['type']][$xcv] = array(
+                            'type'  => sanitize_text_field( $value2['type'] ),
+                            'ref'   => sanitize_text_field( $value2['ref'] ),
+                            'date'  => sanitize_text_field( $value2['date'] ),
+                            'place' => sanitize_text_field( $value2['place'] ),
+                        );
+                        $xcv++;
+                    }
+                
                 }
                 unset( $event[$key1] );
             }
-            
-            $xcv++;
+        
         }
         foreach ( $phone as $key => $ph ) {
             $phone[$key] = sanitize_text_field( $ph );
         }
         foreach ( $email as $key => $em ) {
-            $email[$key] = sanitize_email( $em );
+            
+            if ( sanitize_email( $em ) ) {
+                $email[$key] = sanitize_email( $em );
+            } else {
+                unset( $email[$key] );
+            }
+        
         }
         foreach ( $address as $key => $addr ) {
             $address[$key] = sanitize_text_field( $addr );
@@ -565,23 +647,26 @@ class Genealogical_Tree_Admin
         update_post_meta( $post_id, 'phone', $phone );
         update_post_meta( $post_id, 'email', $email );
         update_post_meta( $post_id, 'address', $address );
-        if($sex==='M'){
-            if($_POST['gt']['wife']){
-                foreach ($_POST['gt']['wife'] as $key => $value) {
-                    $_POST['gt']['wife'][$key]['id'] = sanitize_text_field($value['id']);
+        
+        if ( $sex === 'M' ) {
+            if ( $_POST['gt']['wife'] ) {
+                foreach ( $_POST['gt']['wife'] as $key => $value ) {
+                    $_POST['gt']['wife'][$key]['id'] = sanitize_text_field( $value['id'] );
                 }
             }
             $spouses = $_POST['gt']['wife'];
         }
-
-        if($sex==='F'){
-            if($_POST['gt']['husb']){
-                foreach ($_POST['gt']['husb'] as $key => $value) {
-                    $_POST['gt']['husb'][$key]['id'] = sanitize_text_field($value['id']);
+        
+        
+        if ( $sex === 'F' ) {
+            if ( $_POST['gt']['husb'] ) {
+                foreach ( $_POST['gt']['husb'] as $key => $value ) {
+                    $_POST['gt']['husb'][$key]['id'] = sanitize_text_field( $value['id'] );
                 }
             }
             $spouses = $_POST['gt']['husb'];
         }
+        
         if ( $spouses ) {
             if ( !current( $spouses )['id'] ) {
                 $spouses = array();
@@ -603,7 +688,7 @@ class Genealogical_Tree_Admin
     }
     
     /**
-     * Register the
+     * Attach Detached Family
      *
      * @since    1.0.0
      */
@@ -615,8 +700,8 @@ class Genealogical_Tree_Admin
         $motherBefoerUpdate
     )
     {
-        $query = new WP_Query( array(
-            'post_type'      => 'family',
+        $query = new \WP_Query( array(
+            'post_type'      => 'gt-family',
             'posts_per_page' => -1,
             'meta_query'     => array(
             'relation' => 'OR',
@@ -674,8 +759,8 @@ class Genealogical_Tree_Admin
             }
         }
         if ( $father && $mother ) {
-            $query = new WP_Query( array(
-                'post_type'      => 'family',
+            $query = new \WP_Query( array(
+                'post_type'      => 'gt-family',
                 'posts_per_page' => -1,
                 'meta_query'     => array(
                 'relation' => 'OR',
@@ -709,8 +794,8 @@ class Genealogical_Tree_Admin
             ) );
         }
         if ( $father && !$mother ) {
-            $query = new WP_Query( array(
-                'post_type'      => 'family',
+            $query = new \WP_Query( array(
+                'post_type'      => 'gt-family',
                 'posts_per_page' => -1,
                 'meta_query'     => array(
                 'relation' => 'AND',
@@ -727,8 +812,8 @@ class Genealogical_Tree_Admin
             ) );
         }
         if ( !$father && $mother ) {
-            $query = new WP_Query( array(
-                'post_type'      => 'family',
+            $query = new \WP_Query( array(
+                'post_type'      => 'gt-family',
                 'posts_per_page' => 1,
                 'meta_query'     => array(
                 'relation' => 'AND',
@@ -757,7 +842,7 @@ class Genealogical_Tree_Admin
     }
     
     /**
-     * Register the 
+     * Create Or Update Family
      *
      * @since    1.0.0
      */
@@ -791,7 +876,7 @@ class Genealogical_Tree_Admin
     }
     
     /**
-     * Register the 
+     * Find Or Create Family
      *
      * @since    1.0.0
      */
@@ -803,8 +888,8 @@ class Genealogical_Tree_Admin
         $family_id = null;
         
         if ( $spouse ) {
-            $query = new WP_Query( array(
-                'post_type'      => 'family',
+            $query = new \WP_Query( array(
+                'post_type'      => 'gt-family',
                 'posts_per_page' => 1,
                 'meta_query'     => array(
                 'relation' => 'AND',
@@ -827,7 +912,7 @@ class Genealogical_Tree_Admin
                     'post_content' => '',
                     'post_status'  => 'publish',
                     'post_author'  => 1,
-                    'post_type'    => 'family',
+                    'post_type'    => 'gt-family',
                 ) );
                 update_post_meta( $family_id, 'root', $root );
                 update_post_meta( $family_id, 'spouse', $spouse );
@@ -839,8 +924,8 @@ class Genealogical_Tree_Admin
         
         
         if ( !$spouse ) {
-            $query = new WP_Query( array(
-                'post_type'      => 'family',
+            $query = new \WP_Query( array(
+                'post_type'      => 'gt-family',
                 'posts_per_page' => 1,
                 'meta_query'     => array(
                 'relation' => 'AND',
@@ -862,7 +947,7 @@ class Genealogical_Tree_Admin
                     'post_content' => '',
                     'post_status'  => 'publish',
                     'post_author'  => 1,
-                    'post_type'    => 'family',
+                    'post_type'    => 'gt-family',
                 ) );
                 update_post_meta( $family_id, 'root', $root );
             } else {
@@ -875,7 +960,7 @@ class Genealogical_Tree_Admin
     }
     
     /**
-     * Register the 
+     * get family group name
      *
      * @since    1.0.0
      */
@@ -884,11 +969,11 @@ class Genealogical_Tree_Admin
         
         if ( $family_group_name ) {
             $family_group_name = sanitize_text_field( $family_group_name );
-            $term = term_exists( $family_group_name, 'family_group' );
+            $term = term_exists( $family_group_name, 'gt-family-group' );
             $suggestions = array();
             
             if ( 0 !== $term && null !== $term ) {
-                $terms = get_terms( 'family_group', array(
+                $terms = get_terms( 'gt-family-group', array(
                     'hide_empty' => false,
                 ) );
                 $terms_slug = array();
@@ -916,36 +1001,64 @@ class Genealogical_Tree_Admin
     }
     
     /**
-     * Register theavaScript for the admin area.
+     * Generate page
      *
      * @since    1.0.0
      */
-    public function options_export()
+    public function generate_page( $family_group_id )
     {
-        ?>
-        <div class="wrap">
-            <h2>Export Ged</h2>
-
-        </div>
-        <?php 
+        $family_group_obj = get_term( $family_group_id );
+        $family_group_name = $family_group_obj->name;
+        $return = '';
+        $my_post = array(
+            'post_title'   => wp_strip_all_tags( 'Family Tree - ' . $family_group_name ),
+            'post_content' => '[gt-tree family=\'' . $family_group_id . '\']',
+            'post_status'  => 'publish',
+            'post_author'  => 1,
+            'post_type'    => 'page',
+        );
+        $tree_page_id = wp_insert_post( $my_post );
+        update_term_meta( $family_group_id, 'tree_page', $tree_page_id );
+        // Create default family members page of group
+        $my_post_members = array(
+            'post_title'   => wp_strip_all_tags( 'Family Members - ' . $family_group_name ),
+            'post_content' => '[gt-members family=\'' . $family_group_id . '\']',
+            'post_status'  => 'publish',
+            'post_author'  => 1,
+            'post_type'    => 'page',
+        );
+        $members_page_id = wp_insert_post( $my_post_members );
+        update_term_meta( $family_group_id, 'members_page', $members_page_id );
+        // Create family tree list page of group
+        $my_post = array(
+            'post_title'   => wp_strip_all_tags( 'Family Tree List - ' . $family_group_name ),
+            'post_content' => '[gt-tree-list family=\'' . $family_group_id . '\']',
+            'post_status'  => 'publish',
+            'post_author'  => 1,
+            'post_type'    => 'page',
+        );
+        $tree_list_page_id = wp_insert_post( $my_post );
+        update_term_meta( $family_group_id, 'tree_list_page', $tree_list_page_id );
+        return $return;
     }
     
     /**
-     * Register the 
+     * create family group free
      *
      * @since    1.0.0
      */
     public function create_family_group_free( $term_id )
     {
+        $this->generate_page( $term_id );
         
         if ( gt_fs()->is_not_paying() ) {
             $terms = get_terms( array(
-                'taxonomy'   => 'family_group',
+                'taxonomy'   => 'gt-family-group',
                 'hide_empty' => false,
             ) );
             
             if ( count( $terms ) > 1 ) {
-                wp_delete_term( $term_id, 'family_group' );
+                wp_delete_term( $term_id, 'gt-family-group' );
                 echo  '<a href="' . gt_fs()->get_upgrade_url() . '">' . __( 'Upgrade Now!', 'genealogical-tree' ) . '</a> to create more family group' ;
                 echo  '</section>' ;
                 die;
@@ -956,20 +1069,171 @@ class Genealogical_Tree_Admin
     }
     
     /**
-     *  Set the submenu as active/current while anywhere in your Custom Post Type (member)
+     * Set the submenu as active/current while anywhere in your Custom Post Type (member)
+     *
+     * @since    1.0.0
      */
     public function set_family_group_current_menu( $parent_file )
     {
         global  $submenu_file, $current_screen, $pagenow ;
-        
-        if ( $current_screen->post_type == 'member' ) {
-            if ( $pagenow == 'edit-tags.php' ) {
-                $submenu_file = 'edit-tags.php?taxonomy=family_group&post_type=' . $current_screen->post_type;
+        if ( $current_screen->post_type == 'gt-member' ) {
+            
+            if ( $pagenow == 'edit-tags.php' || $pagenow == 'term.php' ) {
+                $submenu_file = 'edit-tags.php?taxonomy=gt-family-group&post_type=' . $current_screen->post_type;
+                $parent_file = 'genealogical-tree';
             }
-            $parent_file = 'genealogical-tree';
+        
+        }
+        return $parent_file;
+    }
+    
+    /**
+     * Add family columns content
+     *
+     * @since    1.0.0
+     */
+    public function add_gt_family_group_column_content( $content, $column_name, $term_id )
+    {
+        $term = get_term( $term_id, 'family' );
+        switch ( $column_name ) {
+            case 'shortcode':
+                $content = '<table><tr><td>Tree:</td><td>    <code>[gt-tree family=\'' . $term_id . '\']</code></td></tr>';
+                $content .= '<tr><td>Tree List:</td><td> <code>[gt-tree-list family=\'' . $term_id . '\']</code></td></tr>';
+                $content .= '<tr><td>Members:</td><td> <code>[gt-members family=\'' . $term_id . '\']</code></td></tr></table>';
+                break;
+        }
+        return $content;
+    }
+    
+    /**
+     * Add family columns
+     *
+     * @since    1.0.0
+     */
+    public function add_gt_family_group_columns( $columns )
+    {
+        $columns['shortcode'] = 'Shortcode';
+        return $columns;
+    }
+    
+    /**
+     * Add term page
+     *
+     * @since    1.0.0
+     */
+    public function family_group_add_new_meta_field()
+    {
+        // this will add the custom meta field to the add new term page
+        ?>
+		<div class="form-field">
+			<label for="tree_page"><?php 
+        _e( 'Tree Page', 'genealogical-tree' );
+        ?></label>
+			<input disabled="disabled" type="text" name="tree_page" id="tree_page" value="">
+			<p class="description"><?php 
+        _e( 'Auto Generated: The link of family tree page of this group.', 'genealogical-tree' );
+        ?></p>
+		</div>
+		<div class="form-field">
+			<label for="tree_list_page"><?php 
+        _e( 'Tree List Page', 'genealogical-tree' );
+        ?></label>
+			<input disabled="disabled" type="text" name="tree_list_page" id="tree_list_page" value="">
+			<p class="description"><?php 
+        _e( 'Auto Generated: The link of family tree list page of this group.', 'genealogical-tree' );
+        ?></p>
+		</div>
+		<div class="form-field">
+			<label for="members_page"><?php 
+        _e( 'Members Page', 'genealogical-tree' );
+        ?></label>
+			<input disabled="disabled" type="text" name="members_page" id="members_page" value="">
+			<p class="description"><?php 
+        _e( 'Auto Generated: The link of family members page of this group.', 'genealogical-tree' );
+        ?></p>
+		</div>
+	<?php 
+    }
+    
+    /**
+     * Edit term page
+     *
+     * @since    1.0.0
+     */
+    public function family_group_edit_meta_field( $term )
+    {
+        $t_id = $term->term_id;
+        $tree_page = get_the_permalink( get_term_meta( $term->term_id, 'tree_page', true ) );
+        $tree_list_page = get_the_permalink( get_term_meta( $term->term_id, 'tree_list_page', true ) );
+        $members_page = get_the_permalink( get_term_meta( $term->term_id, 'members_page', true ) );
+        ?>
+		<tr class="form-field">
+		<th scope="row" valign="top"><label for="tree_page"><?php 
+        _e( 'Tree Page', 'genealogical-tree' );
+        ?></label></th>
+			<td>
+				<input disabled="disabled" type="text" name="tree_page" id="tree_page" value="<?php 
+        echo  ( esc_attr( $tree_page ) ? esc_attr( $tree_page ) : '' ) ;
+        ?>">
+				<p class="description"><?php 
+        _e( 'Auto Generated: The link of family tree page of this group.', 'genealogical-tree' );
+        ?></p>
+			</td>
+		</tr>
+		<tr class="form-field">
+		<th scope="row" valign="top"><label for="tree_list_page"><?php 
+        _e( 'Tree List Page', 'genealogical-tree' );
+        ?></label></th>
+			<td>
+				<input disabled="disabled" type="text" name="tree_list_page" id="tree_list_page" value="<?php 
+        echo  ( esc_attr( $tree_list_page ) ? esc_attr( $tree_list_page ) : '' ) ;
+        ?>">
+				<p class="description"><?php 
+        _e( 'Auto Generated: The link of family tree page of this group.', 'genealogical-tree' );
+        ?></p>
+			</td>
+		</tr>
+		<tr class="form-field">
+		<th scope="row" valign="top"><label for="members_page"><?php 
+        _e( 'Members Page', 'genealogical-tree' );
+        ?></label></th>
+			<td>
+				<input disabled="disabled" type="text" name="members_page" id="members_page" value="<?php 
+        echo  ( esc_attr( $members_page ) ? esc_attr( $members_page ) : '' ) ;
+        ?>">
+				<p class="description"><?php 
+        _e( 'Auto Generated: The link of family members page of this group.', 'genealogical-tree' );
+        ?></p>
+			</td>
+		</tr>
+	<?php 
+    }
+    
+    /**
+     * Save extra taxonomy fields callback function.
+     *
+     * @since    1.0.0
+     */
+    public function save_taxonomy_custom_meta( $term_id )
+    {
+        
+        if ( isset( $_POST['tree_page'] ) ) {
+            $tree_page = sanitize_text_field( $_POST['tree_page'] );
+            update_term_meta( $term_id, 'tree_page', $tree_page );
         }
         
-        return $parent_file;
+        
+        if ( isset( $_POST['tree_list_page'] ) ) {
+            $tree_list_page = sanitize_text_field( $_POST['tree_list_page'] );
+            update_term_meta( $term_id, 'tree_list_page', $tree_list_page );
+        }
+        
+        
+        if ( isset( $_POST['members_page'] ) ) {
+            $members_page = sanitize_text_field( $_POST['members_page'] );
+            update_term_meta( $term_id, 'members_page', $members_page );
+        }
+    
     }
 
 }

@@ -1,5 +1,5 @@
 <?php
-
+namespace Genealogical_Tree\Includes;
 /**
  * The file that defines the core plugin class
  *
@@ -79,18 +79,10 @@ class Genealogical_Tree {
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
 		$this->define_api_hooks();
-
 	}
 
 	/**
 	 * Load the required dependencies for this plugin.
-	 *
-	 * Include the following files that make up the plugin:
-	 *
-	 * - Genealogical_Tree_Loader. Orchestrates the hooks of the plugin.
-	 * - Genealogical_Tree_i18n. Defines internationalization functionality.
-	 * - Genealogical_Tree_Admin. Defines all hooks for the admin area.
-	 * - Genealogical_Tree_Public. Defines all hooks for the public side of the site.
 	 *
 	 * Create an instance of the loader which will be used to register the hooks
 	 * with WordPress.
@@ -100,34 +92,8 @@ class Genealogical_Tree {
 	 */
 	private function load_dependencies() {
 
-		/**
-		 * The class responsible for orchestrating the actions and filters of the
-		 * core plugin.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-genealogical-tree-loader.php';
-
-		/**
-		 * The class responsible for defining internationalization functionality
-		 * of the plugin.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-genealogical-tree-i18n.php';
-
-		/**
-		 * The class responsible for defining all actions that occur in the admin area.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-genealogical-tree-admin.php';
-		/**
-		 * The class responsible for defining all actions that occur in the admin area.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'api/class-genealogical-tree-api.php';
-		/**
-		 * The class responsible for defining all actions that occur in the public-facing
-		 * side of the site.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-genealogical-tree-public.php';
-
-		$this->loader = new Genealogical_Tree_Loader();
-
+		$this->loader = new \Genealogical_Tree\Includes\Genealogical_Tree_Loader();
+		
 	}
 
 	/**
@@ -141,8 +107,7 @@ class Genealogical_Tree {
 	 */
 	private function set_locale() {
 
-		$plugin_i18n = new Genealogical_Tree_i18n();
-
+		$plugin_i18n = new \Genealogical_Tree\Includes\Genealogical_Tree_i18n();
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
 
 	}
@@ -156,30 +121,30 @@ class Genealogical_Tree {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Genealogical_Tree_Admin( $this->get_plugin_name(), $this->get_version() );
-
+		$plugin_admin = new \Genealogical_Tree\Genealogical_Tree_Admin\Genealogical_Tree_Admin( $this->get_plugin_name(), $this->get_version() );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'admin_menu' );
 		$this->loader->add_action( 'init', $plugin_admin, 'init_post_type_and_taxonomy' );
-		$this->loader->add_filter( 'parent_file', $plugin_admin, 'set_family_group_current_menu' );
-		
+		$this->loader->add_filter( 'parent_file', $plugin_admin, 'set_family_group_current_menu', 100 );
 		$this->loader->add_action( 'add_meta_boxes', $plugin_admin, 'add_meta_boxes_member_info' );
 		$this->loader->add_action( 'add_meta_boxes', $plugin_admin, 'add_meta_boxes_family_info' );
-		
 		$this->loader->add_action( 'post_updated', $plugin_admin, 'update_meta_boxes_member_info');
-
 		$this->loader->add_action( 'admin_notices', $plugin_admin, 'family_group_validation_notice_handler');
-
-		$this->loader->add_action( 'create_family_group', $plugin_admin, 'create_family_group_free');
-	
-		$this->loader->add_filter( 'manage_edit-member_columns', $plugin_admin, 'member_columns' );
-		$this->loader->add_filter( 'manage_edit-member_sortable_columns', $plugin_admin, 'member_sortable_columns' );
-		$this->loader->add_action( 'manage_member_posts_custom_column', $plugin_admin, 'member_posts_born_column', 10, 2  );
+		$this->loader->add_action( 'create_gt-family-group', $plugin_admin, 'create_family_group_free');
+		$this->loader->add_filter( 'manage_edit-gt-member_columns', $plugin_admin, 'member_columns' );
+		$this->loader->add_filter( 'manage_edit-gt-member_sortable_columns', $plugin_admin, 'member_sortable_columns' );
+		$this->loader->add_action( 'manage_gt-member_posts_custom_column', $plugin_admin, 'member_posts_born_column', 10, 2  );
 		$this->loader->add_action( 'pre_get_posts', $plugin_admin, 'member_born_orderby', 10, 2  );
 
+		//$this->loader->add_action( 'gt-family-group_add_form_fields', $plugin_admin, 'family_group_add_new_meta_field', 10, 2 );
+		$this->loader->add_action( 'gt-family-group_edit_form_fields', $plugin_admin, 'family_group_edit_meta_field', 10, 2 );
 
-		
+		//$this->loader->add_action( 'edited_gt-family-group', $plugin_admin, 'save_taxonomy_custom_meta', 10, 2 );  
+		//$this->loader->add_action( 'create_gt-family-group', $plugin_admin, 'save_taxonomy_custom_meta', 10, 2 );
+
+		$this->loader->add_filter( 'manage_edit-gt-family-group_columns', $plugin_admin, 'add_gt_family_group_columns' );
+		$this->loader->add_filter( 'manage_gt-family-group_custom_column', $plugin_admin, 'add_gt_family_group_column_content',10,3 );
 
 	}
 	/**
@@ -191,14 +156,11 @@ class Genealogical_Tree {
 	 */
 	private function define_api_hooks() {
 
-		$plugin_api = new Genealogical_Tree_Api( $this->get_plugin_name(), $this->get_version() );
-
-
+		$plugin_api = new \Genealogical_Tree\Includes\Genealogical_Tree_Api( $this->get_plugin_name(), $this->get_version() );
 		$this->loader->add_action( 'rest_api_init', $plugin_api, 'register_rest_route_member_ind' );
 		$this->loader->add_action( 'rest_api_init', $plugin_api, 'register_rest_route_family_fam' );
 		$this->loader->add_action( 'rest_api_init', $plugin_api, 'register_rest_route_member_popover' );
 
-		
 	}
 	/**
 	 * Register all of the hooks related to the public-facing functionality
@@ -209,15 +171,13 @@ class Genealogical_Tree {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new Genealogical_Tree_Public( $this->get_plugin_name(), $this->get_version() );
-
+		$plugin_public = new \Genealogical_Tree\Genealogical_Tree_Public\Genealogical_Tree_Public( $this->get_plugin_name(), $this->get_version() );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 		$this->loader->add_filter( 'the_content', $plugin_public, 'data_in_single_page');
-		
 		add_shortcode( 'gt-tree', array( $plugin_public, 'display_tree' ));
+		add_shortcode( 'gt-tree-list', array( $plugin_public, 'display_tree_list' ));
 		add_shortcode( 'gt-members', array( $plugin_public, 'display_members' ));
-
 
 	}
 

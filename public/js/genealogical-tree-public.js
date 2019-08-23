@@ -246,24 +246,7 @@
     return this
   }
 }(window.jQuery);
-/* ===========================================================
- * bootstrap-popover.js v2.3.0
- * http://twitter.github.com/bootstrap/javascript.html#popovers
- * ===========================================================
- * Copyright 2012 Twitter, Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * =========================================================== */
+
 ! function($) {
   "use strict"; // jshint ;_;
   /* POPOVER PUBLIC CLASS DEFINITION
@@ -328,6 +311,7 @@
     return this
   }
 }(window.jQuery);
+
 var ginge = (function() {
   var settings = {
     mapType: 'google',
@@ -336,10 +320,13 @@ var ginge = (function() {
   };
   var template = {};
   var parseNames = {};
+
   var onReady = function(options) {
+    //console.log(options);
     loadTemplates();
     settings = jQuery.extend(settings, options || (options = {}));
   };
+
   var getCookie = function(sName) {
     sName = sName.toLowerCase();
     var oCrumbles = document.cookie.split(';');
@@ -351,26 +338,28 @@ var ginge = (function() {
     }
     return '';
   }
+
   var setCookie = function(sName, sValue) {
     var oDate = new Date();
     oDate.setYear(oDate.getFullYear() + 1);
     var sCookie = encodeURIComponent(sName) + '=' + encodeURIComponent(sValue) + ';expires=' + oDate.toGMTString() + ';path=/';
     document.cookie = sCookie;
   }
+
   var clearCookie = function(sName) {
     setCookie(sName, '');
   }
+
   var loadIndi = function(id, hilight, treetop) {
     jQuery.ajax({
-      url: "/wp-json/genealogical-tree/v1/member/indi_" + id + ".js",
+      url: gtObj.gt_rest_url+"genealogical-tree/v1/member/indi_" + id + ".js",
       cache: true,
       dataType: "json"
     }).done(function(jsonIndi) {
       var childof = jsonIndi.root.indi.childof;
-      console.log(jsonIndi.root.indi);
       if (childof) {
         jQuery.ajax({
-          url: "/wp-json/genealogical-tree/v1/family/fam_" + childof + ".js",
+          url: gtObj.gt_rest_url+"genealogical-tree/v1/family/fam_" + childof + ".js",
           cache: true,
           dataType: "json"
         }).done(function(jsonFam) {
@@ -385,13 +374,16 @@ var ginge = (function() {
       alert("id=" + id + " : " + textStatus);
     });
   };
+
   var loadFam = function(famId, indiId, hilight) {
-    var url = "/wp-json/genealogical-tree/v1/family/fam_" + famId + ".js";
+    //console.log('loadFam run')
+    var url = gtObj.gt_rest_url+"genealogical-tree/v1/family/fam_" + famId + ".js";
     jQuery.ajax({
       url: url,
       cache: true,
       dataType: "json"
     }).done(function(json) {
+
       populateFam(json, indiId, hilight);
     }).fail(function(jqXHR, textStatus) {
       alert(url + " : " + textStatus);
@@ -455,12 +447,11 @@ var ginge = (function() {
     indi.hilight = hilight;
     parseNames = JSON.parse('{ "names": [] }');
     settings.branchCount = 1;
-    //settings.famLegend.clear();
     var birt = _.findWhere(indi.event, {
       'type': 'birt'
     });
     var birtTxt = "";
-    console.log(birt);
+
     if (birt && birt.date) birtTxt = birt.date.value.substring(0, 4);
     jQuery('#fam-canvas h2').html(indi.name);
     addToFamLegend(indi.id, indi.name.first, indi.name.last, birtTxt);
@@ -484,6 +475,7 @@ var ginge = (function() {
       fb: getCookie('facebook'),
       tw: getCookie('twitter'),
       treeBranch: function(famId, indiId, hilight) {
+
         loadFam(famId, indiId, hilight);
       },
       treeNoBranch: function() {
@@ -511,19 +503,23 @@ var ginge = (function() {
     });
     jQuery('#cg-sidebar-inner').html(template.treenames(parseNames));
   };
+
   var loadTemplates = function() {
     var templateNames = ['plachead', 'placbody', 'event', 'parent', 'sibling', 'family', 'reference', 'treenames', 'treetop', 'treetoplegend', 'treebranch', 'treebranchlegend'];
     templateNames.forEach(function(templateName) {
-      jQuery.get('/wp-content/plugins/genealogical-tree/public/js/templates/' + templateName + '.js', function(data) {
+      jQuery.get(gtObj.gt_dir_url+'public/js/templates/' + templateName + '.js', function(data) {
         template[templateName] = _.template(data);
       }, 'html');
     });
   };
+
   return {
     onReady: onReady,
     loadIndi: loadIndi
   };
 })();
+
+
 jQuery(document).ready(ginge.onReady());
 (function($) {
   function closePopover() {
@@ -536,6 +532,7 @@ jQuery(document).ready(ginge.onReady());
       $('#spinner').show();
     }).bind("ajaxStop", function() {
       $('#spinner').hide();
+      
       var uls = $('#famTree ul');
       for (var i = 0; i < uls.length; i++) {
         var childrens = $(uls[i]).children();
@@ -550,6 +547,7 @@ jQuery(document).ready(ginge.onReady());
           }
         }
       }
+
     }).bind("ajaxError", function() {
       $('#spinner').hide();
     });
@@ -1296,7 +1294,7 @@ jQuery(document).ready(ginge.onReady());
             return
           }
           var options = collectOptions(panzoomScript);
-          console.log(options);
+          //console.log(options);
           window[globalName] = createPanZoom(el, options)
         }
 

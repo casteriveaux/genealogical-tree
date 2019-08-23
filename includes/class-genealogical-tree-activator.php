@@ -1,4 +1,5 @@
 <?php
+namespace Genealogical_Tree\Includes;
 
 /**
  * Fired during plugin activation
@@ -30,7 +31,10 @@ class Genealogical_Tree_Activator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
-
+		update_option( 'genealogical_tree_active_ver', '1.2.0' );
+		$plugin_admin = new \Genealogical_Tree\Genealogical_Tree_Admin\Genealogical_Tree_Admin( '', '' );
+		$plugin_admin->init_post_type_and_taxonomy();
+		flush_rewrite_rules();
 	}
 
 }
